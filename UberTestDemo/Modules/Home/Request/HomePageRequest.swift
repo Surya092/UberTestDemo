@@ -33,19 +33,18 @@ class HomePageRequest: NSObject {
             self.networkManager.getData(withApiEndpoint: searchAPIEndPoint) { [weak self](data, response, error) in
                 
                 if let strongSelf = self {
+                    strongSelf.requestDictionary.removeValue(forKey: searchAPIEndPoint)
                     var responseStatusCode: Int?
                     if let httpResponse = response as? HTTPURLResponse {
                         responseStatusCode = httpResponse.statusCode
                     }
                     if error != nil {
                         DispatchQueue.main.async {
-                            strongSelf.requestDictionary.removeValue(forKey: searchAPIEndPoint)
                             completionHandler(nil, error, responseStatusCode)
                         }
                     } else {
                         guard let data = data else {
                             DispatchQueue.main.async {
-                                strongSelf.requestDictionary.removeValue(forKey: searchAPIEndPoint)
                                 completionHandler(nil, error, responseStatusCode)
                             }
                             return
@@ -55,12 +54,10 @@ class HomePageRequest: NSObject {
                             if let json = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String:Any], let status = json["stat"] as? String, status == "ok" {
                                 let responseModel = strongSelf.parseAPIresponse(jsonDictionary: json, searchText: searchText)
                                 DispatchQueue.main.async {
-                                    strongSelf.requestDictionary.removeValue(forKey: searchAPIEndPoint)
                                     completionHandler(responseModel, nil, responseStatusCode)
                                 }
                             } else {
                                 DispatchQueue.main.async {
-                                    strongSelf.requestDictionary.removeValue(forKey: searchAPIEndPoint)
                                     completionHandler(nil, error, responseStatusCode)
                                 }
                             }

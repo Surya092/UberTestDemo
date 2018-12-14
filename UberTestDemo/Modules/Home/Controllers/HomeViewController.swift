@@ -107,11 +107,14 @@ extension HomeViewController: UISearchBarDelegate {
     //Search Button Tapped
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         if let searchText = searchBar.text {
-            self.getSearchData(searchText: searchText)
-            if lastTextSearch == searchText {
+            
+            //Stop search if last search and current search is same
+            if lastTextSearch == searchText, !descriptionView.isHidden, descriptionViewLabel.text == Constant.AppStringConstant.apiErrorMessage.rawValue {
+                searchBar.resignFirstResponder()
                 overlayView.isHidden = true
                 return
             }
+            self.getSearchData(searchText: searchText)
         }
     }
     

@@ -28,28 +28,46 @@ class PhotoCollectionViewCell: UICollectionViewCell {
             apiPoint = String.init(format: Constant.apiEndPoint.photoApiEndPoint.rawValue, stringFarm, server, id, secret)
             let imageKey = stringFarm + server + id + secret
             
-            //If image is present in cache retrieve
-            if let image = apiRequest.getImageFromDocumentDirectory(key: imageKey) {
-                self.cellImageView.image = image
-                return
-            }
-            
-            //Make request to Fetch Image and update the cell
-            operation = BlockOperation(block: {
-                apiRequest.getImage(imageAPIEndPoint: self.apiPoint, imageKey: imageKey) {[weak self] (image,imageAPIEndPoint)  in
-                    if let strongSelf = self {
-                        if let oper = strongSelf.operation, !oper.isCancelled, imageAPIEndPoint == strongSelf.apiPoint {
-                            OperationQueue.main.addOperation({
-                                strongSelf.cellImageView.image = image
-                            })
+            //If image is present in cache retrieve using Background Thread
+            DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+                
+                if let strongSelf = self {
+                    
+                    if let image = apiRequest.getImageFromDocumentDirectory(key: imageKey) {
+                        DispatchQueue.main.async { [weak strongSelf] in
+                            if let selfInstance = strongSelf {
+                                selfInstance.cellImageView.image = image
+                            }
                         }
+                        return
+                    }
+                    
+                    DispatchQueue.main.async { [weak strongSelf] in
+                        
+                        if let selfInstance = strongSelf {
+                            
+                            //Make request to Fetch Image and update the cell
+                            selfInstance.operation = BlockOperation(block: {
+                                apiRequest.getImage(imageAPIEndPoint: selfInstance.apiPoint, imageKey: imageKey) {[weak selfInstance] (image,imageAPIEndPoint)  in
+                                    if let instance = selfInstance {
+                                        if let oper = instance.operation, !oper.isCancelled, imageAPIEndPoint == instance.apiPoint {
+                                            OperationQueue.main.addOperation({
+                                                instance.cellImageView.image = image
+                                            })
+                                        }
+                                    }
+                                }
+                            })
+                            
+                            //Add Operation to Operation Queue
+                            if let oper = selfInstance.operation {
+                                apiRequest.concurrentQueue.addOperation(oper)
+                            }
+                        }
+                        
                     }
                 }
-            })
-            
-            //Add Operation to Operation Queue
-            if let oper = operation {
-                apiRequest.concurrentQueue.addOperation(oper)
+        
             }
         }
     }
