@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Home View Controller-->
+        <scene sceneID="tne-QT-ifu">
+            <objects>
+                <viewController id="BYZ-38-t0r" customClass="HomeViewController" customModule="UberTestDemo" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <searchBar contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="3Jh-oB-14y">
+                                <rect key="frame" x="0.0" y="20" width="375" height="56"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </searchBar>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="5qi-lR-rbA">
+                                <rect key="frame" x="0.0" y="76" width="375" height="591"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="rcD-Sw-BSw">
+                                    <size key="itemSize" width="50" height="50"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="50" height="50"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="PhotoCollectionViewCell" id="kXZ-v6-36p" customClass="PhotoCollectionViewCell" customModule="UberTestDemo" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
+                                            <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </view>
+                                    </collectionViewCell>
+                                </cells>
+                                <collectionReusableView key="sectionFooterView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="bmZ-8t-6SE">
+                                    <rect key="frame" x="0.0" y="50" width="375" height="50"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </collectionReusableView>
+                            </collectionView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6AV-D6-HQN" userLabel="Overlay View">
+                                <rect key="frame" x="0.0" y="76" width="375" height="591"/>
+                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.36437821061643827" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3Qm-u4-TSA" userLabel="DescriptionView">
+                                <rect key="frame" x="0.0" y="76" width="375" height="591"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="i01-ao-Rke">
+                                        <rect key="frame" x="161.5" y="282.5" width="52.5" height="26.5"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="22"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstItem="i01-ao-Rke" firstAttribute="centerX" secondItem="3Qm-u4-TSA" secondAttribute="centerX" id="YMV-mh-hvu"/>
+                                    <constraint firstItem="i01-ao-Rke" firstAttribute="centerY" secondItem="3Qm-u4-TSA" secondAttribute="centerY" id="tNm-37-fZF"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="3Qm-u4-TSA" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="6bT-Ho-hxk"/>
+                            <constraint firstItem="6AV-D6-HQN" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="Fa1-To-chn"/>
+                            <constraint firstItem="5qi-lR-rbA" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="Hff-M8-WkW"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="top" secondItem="3Jh-oB-14y" secondAttribute="top" id="OaF-tr-jYC"/>
+                            <constraint firstItem="5qi-lR-rbA" firstAttribute="top" secondItem="3Jh-oB-14y" secondAttribute="bottom" id="TMz-ak-vCe"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="3Jh-oB-14y" secondAttribute="trailing" id="VTI-2d-yVX"/>
+                            <constraint firstItem="3Qm-u4-TSA" firstAttribute="top" secondItem="5qi-lR-rbA" secondAttribute="top" id="bpE-31-d9K"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="leading" secondItem="3Jh-oB-14y" secondAttribute="leading" id="fFN-M6-GdY"/>
+                            <constraint firstItem="6AV-D6-HQN" firstAttribute="top" secondItem="5qi-lR-rbA" secondAttribute="top" id="g78-aE-cCx"/>
+                            <constraint firstItem="5qi-lR-rbA" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="hOe-VK-X9z"/>
+                            <constraint firstItem="6AV-D6-HQN" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="iBU-Me-FXr"/>
+                            <constraint firstItem="3Qm-u4-TSA" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="kq6-ah-jWI"/>
+                            <constraint firstItem="6AV-D6-HQN" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="phA-ja-zve"/>
+                            <constraint firstItem="3Qm-u4-TSA" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="xLe-nL-nbE"/>
+                            <constraint firstItem="5qi-lR-rbA" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="zGS-uw-Kkf"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
+                    </view>
+                    <connections>
+                        <outlet property="descriptionView" destination="3Qm-u4-TSA" id="Snd-LR-5hk"/>
+                        <outlet property="descriptionViewLabel" destination="i01-ao-Rke" id="TFG-hr-dws"/>
+                        <outlet property="overlayView" destination="6AV-D6-HQN" id="2eW-JU-s7w"/>
+                        <outlet property="photosCollectionView" destination="5qi-lR-rbA" id="G3n-kz-sla"/>
+                        <outlet property="searchBar" destination="3Jh-oB-14y" id="Hu9-Zy-4Y6"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+            </objects>
+        </scene>
+    </scenes>
+</document>
