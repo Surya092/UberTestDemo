@@ -30,43 +30,49 @@ class HomePageRequest: NSObject {
         
         //Make request on Background Thread
         DispatchQueue.global().async {
-            self.networkManager.getData(withApiEndpoint: searchAPIEndPoint) { (data, response, error) in
+            self.networkManager.getData(withApiEndpoint: searchAPIEndPoint) { [weak self](data, response, error) in
                 
-                self.requestDictionary[searchAPIEndPoint] = nil
-                var responseStatusCode: Int?
-                if let httpResponse = response as? HTTPURLResponse {
-                    responseStatusCode = httpResponse.statusCode
-                }
-                if error != nil {
-                    DispatchQueue.main.async {
-                        completionHandler(nil, error, responseStatusCode)
+                if let strongSelf = self {
+                    var responseStatusCode: Int?
+                    if let httpResponse = response as? HTTPURLResponse {
+                        responseStatusCode = httpResponse.statusCode
                     }
-                } else {
-                    guard let data = data else {
+                    if error != nil {
                         DispatchQueue.main.async {
+                            strongSelf.requestDictionary.removeValue(forKey: searchAPIEndPoint)
                             completionHandler(nil, error, responseStatusCode)
                         }
-                        return
-                    }
-                    
-                    do {
-                        if let json = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String:Any], let status = json["stat"] as? String, status == "ok" {
-                            let responseModel = self.parseAPIresponse(jsonDictionary: json, searchText: searchText)
+                    } else {
+                        guard let data = data else {
                             DispatchQueue.main.async {
-                                completionHandler(responseModel, nil, responseStatusCode)
+                                strongSelf.requestDictionary.removeValue(forKey: searchAPIEndPoint)
+                                completionHandler(nil, error, responseStatusCode)
                             }
-                        } else {
+                            return
+                        }
+                        
+                        do {
+                            if let json = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String:Any], let status = json["stat"] as? String, status == "ok" {
+                                let responseModel = strongSelf.parseAPIresponse(jsonDictionary: json, searchText: searchText)
+                                DispatchQueue.main.async {
+                                    strongSelf.requestDictionary.removeValue(forKey: searchAPIEndPoint)
+                                    completionHandler(responseModel, nil, responseStatusCode)
+                                }
+                            } else {
+                                DispatchQueue.main.async {
+                                    strongSelf.requestDictionary.removeValue(forKey: searchAPIEndPoint)
+                                    completionHandler(nil, error, responseStatusCode)
+                                }
+                            }
+                        } catch let error as NSError {
                             DispatchQueue.main.async {
                                 completionHandler(nil, error, responseStatusCode)
                             }
                         }
-                    } catch let error as NSError {
-                        DispatchQueue.main.async {
-                            completionHandler(nil, error, responseStatusCode)
-                        }
+                        
                     }
-                    
                 }
+                
             }
         }
     }
