@@ -121,7 +121,7 @@ extension HomeViewController: UISearchBarDelegate {
                 if responseState != .Failed {
                     searchBar.resignFirstResponder()
                     overlayView.isHidden = true
-                    descriptionView.isHidden =  responseState == .Failed ? false : true
+                    descriptionView.isHidden =  responseState == .Failed || photoObjects.count == 0 ? false : true
                     return
                 }
             }
