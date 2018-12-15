@@ -8,6 +8,13 @@
 
 import UIKit
 
+enum ResponseState: Int {
+    case Unknown = 0
+    case Received
+    case Failed
+    case LocalDataExist
+}
+
 class HomeViewController: UIViewController {
 
     //UI References
@@ -28,6 +35,7 @@ class HomeViewController: UIViewController {
     var loaderView: UbLoader?
     var lastTextSearch: String = ""
     var homePageRequest = HomePageRequest.init()
+    var responseState = ResponseState.Unknown
     
     //MARK: View LifeCycle
     
@@ -109,10 +117,13 @@ extension HomeViewController: UISearchBarDelegate {
         if let searchText = searchBar.text {
             
             //Stop search if last search and current search is same
-            if lastTextSearch == searchText, !descriptionView.isHidden, descriptionViewLabel.text == Constant.AppStringConstant.apiErrorMessage.rawValue {
-                searchBar.resignFirstResponder()
-                overlayView.isHidden = true
-                return
+            if lastTextSearch == searchText {
+                if responseState != .Failed {
+                    searchBar.resignFirstResponder()
+                    overlayView.isHidden = true
+                    descriptionView.isHidden =  responseState == .Failed ? false : true
+                    return
+                }
             }
             self.getSearchData(searchText: searchText)
         }
@@ -170,7 +181,9 @@ extension HomeViewController: UISearchBarDelegate {
                 
                 //If response is not recieved but error is present Show Failure
                 if response == nil, error != nil  {
+                    self.responseState = .LocalDataExist
                     if self.photoObjects.count == 0 {
+                        self.responseState = .Failed
                         self.descriptionView.isHidden = false
                         self.descriptionViewLabel.text = Constant.AppStringConstant.apiErrorMessage.rawValue
                     }
@@ -178,6 +191,8 @@ extension HomeViewController: UISearchBarDelegate {
                     
                     //Update Response if last search is same as response
                     if self.lastTextSearch == photoModel.searchText {
+                        
+                        self.responseState = .Received
                         
                         //Update using Batch Updates
                         if let responsePhotoObjects = photoModel.photoModels, responsePhotoObjects.count > 0 {
